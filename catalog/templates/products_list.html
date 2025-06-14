@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load my_tags %}
+{% block content %}
+<div class="row text-center">
+    {% for product in products %}
+    <div class="col-3">
+        <div class="card mb-4 box-shadow">
+        <img src={{product.image | media_filter }} class="card-img-top" alt="Изображение товара">
+            <div class="card-body">
+                <h5 class="card-title">{{product.name}}</h5>
+                <p class="card-text">{{product.description | truncatechars:100}}</p>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>Категория:</strong> {{product.category}}</li>
+                    <li class="list-group-item"><strong>Цена:</strong> {{product.price}}</li>
+                </ul>
+                <div class="card-body">
+                    <a href="#" class="btn btn-primary">Купить</a>
+                    <a href="/product/{{product.id}}" class="btn btn-outline-secondary">Подробнее</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
