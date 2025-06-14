@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load my_tags %}
+{% block content %}
+<div class="container mt-5">
+        <h1 class="text-center mb-4">Описание товара</h1>
+        <div class="card">
+            <img src={{product.image | media_filter}} class="card-img-top" alt="Изображение товара">
+            <div class="card-body">
+                <h5 class="card-title">{{product.name}}</h5>
+                <p class="card-text">{{product.description}}.</p>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>Категория:</strong> {{product.category}}</li>
+                    <li class="list-group-item"><strong>Цена:</strong> {{product.price}}.</li>
+                    <li class="list-group-item"><strong>Дата создания:</strong> {{product.created_at}}</li>
+                    <li class="list-group-item"><strong>Дата последнего изменения:</strong> {{product.updated_at}}</li>
+                </ul>
+                <div class="card-body">
+                    <a href="#" class="btn btn-primary">Купить</a>
+                    <a href="{% url 'catalog:home' %}" class="btn btn-secondary">Назад к списку</a>
+                </div>
+            </div>
+        </div>
+{% endblock %}

@@ -1,12 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from catalog.models import Products
 
 def home(request):
-    latest_products = Products.objects.order_by('-created_at')[:5]
-    for product in latest_products:
-        print(product)
-    return render(request, 'home.html')
+    products = Products.objects.all()
+    context = {"products": products}
+    return render(request, 'products_list.html', context)
 
 
 def contacts(request):
@@ -14,3 +13,9 @@ def contacts(request):
         return render(request, 'contacts.html')
     if request.method == 'POST':
         return HttpResponse("Данные отправлены!")
+
+
+def product(request, pk):
+    product = get_object_or_404(Products, pk=pk)
+    context = {'product': product}
+    return render(request, 'product.html', context)

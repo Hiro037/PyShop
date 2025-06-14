@@ -53,7 +53,7 @@ class Category(models.Model):
     )
 
     def __str__(self):
-        return (f"Категория: {self.name}. Описание: {self.description}")
+        return self.name
 
     class Meta:
         verbose_name = "категория"
