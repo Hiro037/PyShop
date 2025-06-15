@@ -16,52 +16,44 @@
 </div>
 
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-    <h1 class="display-4">Контакты</h1>
+    <h1 class="display-4">Добавить товар</h1>
 </div>
 
 <div class="container">
     <div class="row text-start">
-        <div class="col-lg-9 col-md-6 col-sm-12">
-            <div class="card mb-4 box-shadow">
-                <div class="card-body">
-                    <table class="table table-striped">
-                        <tr>
-                            <td class="w-25">Страна</td>
-                            <td>USA</td>
-                        </tr>
-                        <tr>
-                            <td class="w-25">ИНН</td>
-                            <td>91-1144442</td>
-                        </tr>
-                        <tr>
-                            <td class="w-25">Адрес</td>
-                            <td>Redmond,WA,98052-6399</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-6 col-sm-12">
+        <div class="col-lg-12 col-md-6 col-sm-12">
             <div class="card mb-4 box-shadow">
                 <div class="card-header">
-                    <h4 class="my-0 font-weight-normal">Свяжитесь с нами</h4>
+                    <h4 class="my-0 font-weight-normal">Добавьте товар</h4>
                 </div>
                 <div class="card-body">
-                    <form method="post" action="" class="form-floating">
+                    <form method="post" action="" enctype="multipart/form-data" class="form-floating">
                         {% csrf_token %}
                         <div class="mb-3">
-                            <label for="name">Имя</label>
-                            <input type="text" name="name" class="form-control" id="name" placeholder="Ваше имя" required>
+                            <label for="name">Наименование</label>
+                            <input type="text" name="name" class="form-control" id="name" placeholder="Наименование товара" required>
                         </div>
                         <div class="mb-3">
-                            <label for="phone">Телефон</label>
-                            <input type="text" name="phone" class="form-control" id="phone" placeholder="Контактный телефон" required>
+                            <label for="description">Описание</label>
+                            <input type="text" name="description" class="form-control" id="description" placeholder="Описание товара" required>
                         </div>
                         <div class="mb-3">
-                            <label for="message">Сообщение</label>
-                            <textarea type="text" name="message" class="form-control" id="message" placeholder="Контактный телефон" required></textarea>
+                          <label for="image" class="form-label">Изображение товара</label>
+                          <input class="form-control" type="file" id="image" name="image">
                         </div>
-                        <button type="submit" class="btn btn-lg btn-block btn-outline-primary">Отправить</button>
+                        <div class="mb-3">
+                          <label for="category" class="form-label">Выберите категорию</label>
+                          <select id="category" class="form-select" name="category">
+                              {% for category in categories%}
+                            <option value="{{ category.id }}">{{category.name}}</option>
+                              {% endfor %}
+                          </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="price">Цена</label>
+                            <input type="number" name="price" class="form-control" id="price" placeholder="Цена товара" required>
+                        </div>
+                        <button type="submit" class="btn btn-lg btn-block btn-outline-primary">Добавить товар</button>
                     </form>
                 </div>
             </div>
