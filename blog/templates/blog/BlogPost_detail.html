@@ -1,0 +1,29 @@
+{% extends 'blog/base.html' %}
+{% load my_tags %}
+{% block content %}
+    <div class="container my-4">
+        <div class="row">
+            {% load my_tags %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src={{object.preview | media_filter}} class="card-img-top" alt="Превью поста">
+                    <div class="card-body">
+                        <h5 class="card-title">{{object.title}}</h5>
+                        <p class="card-text" href="/blogs/blogpost/{{object.id}}">{{object.content}}</p>
+                        <p class="card-text"><small class="text-muted">Дата создания: {{object.created_at}}</small></p>
+                        <p class="card-text"><small class="text-muted">Просмотров: {{object.views}}</small></p>
+                    </div>
+                    <div class="card-body">
+                        <a href="{% url 'blog:BlogPostListMain' %}" class="btn btn-secondary">Назад к списку постов</a>
+                    </div>
+                    <div class="card-body">
+                        <a href="{% url 'blog:BlogPostUpdate' object.pk%}" class="btn btn-secondary">Изменить пост</a>
+                    </div>
+                    <div class="card-body">
+                        <a href="{% url 'blog:BlogPostDelete' object.pk%}" class="btn btn-secondary">Удалить пост</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
