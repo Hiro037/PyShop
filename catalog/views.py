@@ -1,41 +1,36 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
+from django.urls import reverse_lazy
+
 from catalog.models import Products, Category
-from catalog.forms import ProductForm
-
-def home(request):
-    # Главная
-    products = Products.objects.all()
-    context = {"products": products}
-    return render(request, 'products_list.html', context)
+from catalog.forms import ContactsForm
+from django.views.generic import ListView, DetailView, CreateView, FormView
 
 
-def contacts(request):
-    # Контакты
-    if request.method == 'GET':
-        return render(request, 'contacts.html')
-    if request.method == 'POST':
-        return HttpResponse("Данные отправлены!")
+class ProductsListView(ListView):
+    # Главная страница со списком товаров
+    model = Products
 
 
-def product(request, pk):
-    # Страницы для отдельного продукта
-    product = get_object_or_404(Products, pk=pk)
-    context = {'product': product}
-    return render(request, 'product.html', context)
+class ContactsFormView(FormView):
+    # Страница для контактов
+    form_class = ContactsForm
+    template_name = 'catalog/contacts.html'
+    success_url = reverse_lazy('catalog:home')
 
-def add_product(request):
-    # Страница для добавления товара
-    if request.method == 'GET':
-        # Рендерит саму страницу
+
+class ProductsDetailView(DetailView):
+    # Страница отображает информацию об одном товаре
+    model = Products
+
+
+class ProductsCreateView(CreateView):
+    # Страница создания товара
+    model = Products
+    fields = ['name', 'description', 'image', 'category', 'price']
+    success_url = reverse_lazy('catalog:home')
+
+    def get_context_data(self, **kwargs):
         all_categories = Category.objects.all()
         context = {'categories': all_categories}
-        return render(request, 'add_product.html', context)
-    elif request.method == 'POST':
-        # Принимает POST запросы
-        form = ProductForm(request.POST, request.FILES)
-        if form.is_valid():  # Проверяет корректность данных
-            form.save()  # Сохраняет товар
-            return redirect('catalog:home')  # Перенаправляет на Главную
-        else:
-            return HttpResponse("Некорректные данные")  # Уведомляет, если данные некорректны
+        return context
