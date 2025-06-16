@@ -11,8 +11,8 @@ class BlogPost(models.Model):
         verbose_name="Фото",
         help_text="Добавьте фото продукта",
     )
-    created_at = models.DateField(auto_now_add=True, verbose_name='Статус опубликования', help_text='Нажмите, если хотите опубликовать пост')
-    is_published = models.BooleanField()
+    created_at = models.DateField(auto_now_add=True)
+    is_published = models.BooleanField(verbose_name='Статус опубликования', help_text='Нажмите, если хотите опубликовать пост', default=True)
     views = models.IntegerField(verbose_name='Количество просмотров', help_text='Количество просмотров', default=0)
 
     def __str__(self):
