@@ -44,7 +44,7 @@
                         <div class="mb-3">
                           <label for="category" class="form-label">Выберите категорию</label>
                           <select id="category" class="form-select" name="category">
-                              {% for category in categories%}
+                              {% for category in categories %}
                             <option value="{{ category.id }}">{{category.name}}</option>
                               {% endfor %}
                           </select>
