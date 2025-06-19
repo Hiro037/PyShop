@@ -18,7 +18,7 @@ class Products(models.Model):
         help_text="Добавьте фото продукта",
     )
     category = models.ForeignKey(
-        to='Category',
+        to="Category",
         on_delete=models.SET_NULL,
         verbose_name="Категория",
         null=True,

@@ -3,8 +3,15 @@ from django.http import HttpResponse
 from django.urls import reverse_lazy
 
 from catalog.models import Products, Category
-from catalog.forms import ContactsForm
-from django.views.generic import ListView, DetailView, CreateView, FormView
+from catalog.forms import ContactsForm, ProductForm
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    FormView,
+    UpdateView,
+    DeleteView,
+)
 
 
 class ProductsListView(ListView):
@@ -15,8 +22,8 @@ class ProductsListView(ListView):
 class ContactsFormView(FormView):
     # Страница для контактов
     form_class = ContactsForm
-    template_name = 'catalog/contacts.html'
-    success_url = reverse_lazy('catalog:home')
+    template_name = "catalog/contacts.html"
+    success_url = reverse_lazy("catalog:home")
 
 
 class ProductsDetailView(DetailView):
@@ -27,10 +34,28 @@ class ProductsDetailView(DetailView):
 class ProductsCreateView(CreateView):
     # Страница создания товара
     model = Products
-    fields = ['name', 'description', 'image', 'category', 'price']
-    success_url = reverse_lazy('catalog:home')
+    form_class = ProductForm
+    success_url = reverse_lazy("catalog:home")
 
     def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
         all_categories = Category.objects.all()
-        context = {'categories': all_categories}
+        context["categories"] = all_categories
         return context
+
+
+class ProductsUpdateView(UpdateView):
+    model = Products
+    form_class = ProductForm
+    success_url = reverse_lazy("catalog:home")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        all_categories = Category.objects.all()
+        context["categories"] = all_categories
+        return context
+
+
+class ProductsDeleteView(DeleteView):
+    model = Products
+    success_url = reverse_lazy("catalog:home")
