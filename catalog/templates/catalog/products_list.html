@@ -19,10 +19,12 @@
                     <a href="/product/{{product.id}}" class="btn btn-outline-secondary">Подробнее</a>
                 </div>
                 <div class="card-body">
+                    {% if user == product.owner or perms.catalog.can_unpublish_product %}
                     <a href="{% url 'catalog:update_product' product.pk %}" class="btn btn-secondary">Изменить товар</a>
                 </div>
                 <div class="card-body">
                     <a href="{% url 'catalog:delete_product' product.pk %}" class="btn btn-secondary">Удалить товар</a>
+                    {% endif %}
                     {% endif %}
                 </div>
             </div>
