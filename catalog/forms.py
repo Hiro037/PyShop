@@ -138,3 +138,9 @@ class ProductForm(forms.ModelForm):
                 )
 
         return image
+
+class ProductModeratorForm(forms.ModelForm):
+    # Эта форма используется для изменения модератором поля is_published товаров
+    class Meta:
+        model = Products
+        fields = ["is_published"]
