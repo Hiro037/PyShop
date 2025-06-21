@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.urls import reverse_lazy
@@ -26,12 +27,12 @@ class ContactsFormView(FormView):
     success_url = reverse_lazy("catalog:home")
 
 
-class ProductsDetailView(DetailView):
+class ProductsDetailView(LoginRequiredMixin, DetailView):
     # Страница отображает информацию об одном товаре
     model = Products
 
 
-class ProductsCreateView(CreateView):
+class ProductsCreateView(LoginRequiredMixin,CreateView):
     # Страница создания товара
     model = Products
     form_class = ProductForm
@@ -44,7 +45,7 @@ class ProductsCreateView(CreateView):
         return context
 
 
-class ProductsUpdateView(UpdateView):
+class ProductsUpdateView(LoginRequiredMixin,UpdateView):
     model = Products
     form_class = ProductForm
     success_url = reverse_lazy("catalog:home")
@@ -56,6 +57,6 @@ class ProductsUpdateView(UpdateView):
         return context
 
 
-class ProductsDeleteView(DeleteView):
+class ProductsDeleteView(LoginRequiredMixin,DeleteView):
     model = Products
     success_url = reverse_lazy("catalog:home")
