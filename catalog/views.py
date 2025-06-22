@@ -2,6 +2,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+from django.core.cache import cache
 
 from catalog.models import Products, Category
 from catalog.forms import ContactsForm, ProductForm, ProductModeratorForm
@@ -14,10 +17,27 @@ from django.views.generic import (
     DeleteView,
 )
 
+from catalog.services import get_products_from_cache, get_products_by_category, \
+    add_categories_to_context
+
 
 class ProductsListView(ListView):
     # Главная страница со списком товаров
     model = Products
+
+    def get_queryset(self):
+        return get_products_from_cache()
+
+    def get_context_data(self, **kwargs):
+        return add_categories_to_context(self, **kwargs)
+
+class ProductsListByCategoryView(ListView):
+    # Страница со списком товаров по категории
+    model = Products
+    template_name = 'catalog/products_list.html'
+
+    def get_context_data(self, **kwargs):
+        return get_products_by_category(self, **kwargs)
 
 
 class ContactsFormView(FormView):
@@ -26,7 +46,7 @@ class ContactsFormView(FormView):
     template_name = "catalog/contacts.html"
     success_url = reverse_lazy("catalog:home")
 
-
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class ProductsDetailView(LoginRequiredMixin, DetailView):
     # Страница отображает информацию об одном товаре
     model = Products
@@ -39,10 +59,7 @@ class ProductsCreateView(LoginRequiredMixin,CreateView):
     success_url = reverse_lazy("catalog:home")
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        all_categories = Category.objects.all()
-        context["categories"] = all_categories
-        return context
+        return add_categories_to_context(self, **kwargs)
 
     def form_valid(self, form_class):
         product = form_class.save()
